@@ -18,6 +18,7 @@ public:
 	int getDotHeight() { return dotHeight; }
 	bool isActive() { return active; }
 	pair<int, int> getPosition() { return position; }
+	void setPosiiton(pair<int, int> _position) { position = _position; }
 	virtual void collision(Object* object) {};
 
 	virtual void Update() {};

@@ -141,6 +141,8 @@ public:
 	Player();
 	~Player();
 
+	int getMaxHp() { return maxHp; }
+	int getCurHp() { return curHp; }
 	void Update();
 	void move(int x, int y);
 	const char* getClassName();

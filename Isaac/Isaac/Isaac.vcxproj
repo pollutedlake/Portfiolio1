@@ -143,24 +143,28 @@
     <ClCompile Include="Fatty.cpp" />
     <ClCompile Include="Issac.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Sucker.cpp" />
+    <ClCompile Include="UIMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DoubleBuffering.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fatty.h" />
     <ClInclude Include="Issac.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="Sucker.h" />
+    <ClInclude Include="UIMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

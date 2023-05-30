@@ -2,7 +2,7 @@
 
 Player::Player()
 {	
-	position = make_pair(50, 25);
+	position = make_pair(160, 90);
 	motion = FRONTIDLE;
 	dotWidth = 29;
 	dotHeight = 37;
@@ -12,6 +12,8 @@ Player::Player()
 	oldTime = clock();
 	attRate = 1500;
 	att = 10;
+	maxHp = 6;
+	curHp = maxHp;
 	for (int i = 0; i < 26; i++)
 	{
 		for (int j = 0; j < 29; j++)

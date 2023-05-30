@@ -8,13 +8,16 @@
 #include "Sucker.h"
 #include "Object.h"
 #include "Fatty.h"
+#include "Map.h"
 #include "StartScene.h"
+#include "UIMgr.h"
 #include <vector>
 using namespace std;
 
 class Issac
 {
 private:
+	Map* map;
 	bool isStartScene;
 	DoubleBuffering* doubleBuffering;
 	StartScene* startScene;
@@ -24,6 +27,7 @@ private:
 	Player* player;
 	Room* room;
 	vector<Object*> objects;
+	UIMgr* uiMgr;
 
 public:
 	Issac();
