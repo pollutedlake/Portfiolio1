@@ -28,6 +28,14 @@ void Sucker::Update()
 		oldTime = curTime;
 		flyMotion = !flyMotion;
 	}
+	for (int i = 0; i < 17; i++)
+	{
+		for (int j = 0; j < 14; j++)
+		{
+			flyLeft[i][j] = flyRight[i][j];
+			flyLeft2[i][j] = flyRight2[i][j];
+		}
+	}
 }
 
 const char* Sucker::getClassName()
@@ -39,7 +47,7 @@ int* Sucker::getColorLine(int row)
 {
 	if(flyMotion)
 	{
-		return fly[row];
+		return flyRight[row];
 	}
-	return fly2[row];
+	return flyRight2[row];
 }

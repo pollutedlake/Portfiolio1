@@ -399,17 +399,45 @@ void Issac::startGame()
 				screenColor[i + 5][j + 290] = map->getMiniMap(i)[j];
 			}
 		}
-		for (int i = 0; i < ceil(player->getMaxHp() / 2); i++)
+		for (int i = 0; i < (player->getCurHp() / 2); i++)
 		{
 			for (int j = 0; j < 10; j++)
 			{
 				for (int k = 0; k < 11; k++)
 				{
-					if (uiMgr->getHeartColorLine(j)[k] == 99)
+					if (uiMgr->getFullHeartColorLine(j)[k] == 99)
 					{
 						continue;
 					}
-					screenColor[j][k + 12 * i] = uiMgr->getHeartColorLine(j)[k];
+					screenColor[j][k + 12 * i] = uiMgr->getFullHeartColorLine(j)[k];
+				}
+			}
+		}
+		if ((player->getCurHp() % 2))
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				for (int j = 0; j < 11; j++)
+				{
+					if (uiMgr->getHalfHeartColorLine(i)[j] == 99)
+					{
+						continue;
+					}
+					screenColor[i][j + 12 * (player->getCurHp() / 2)] = uiMgr->getHalfHeartColorLine(i)[j];
+				}
+			}
+		}
+		for (int i = 0; i < (player->getMaxHp() - player->getCurHp()) / 2; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				for (int k = 0; k < 11; k++)
+				{
+					if (uiMgr->getEmptyHeartColorLine(j)[k] == 99)
+					{
+						continue;
+					}
+					screenColor[j][k + 12 * ((player->getCurHp() / 2) + player->getCurHp() % 2)] = uiMgr->getEmptyHeartColorLine(j)[k];
 				}
 			}
 		}

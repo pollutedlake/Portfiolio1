@@ -11,7 +11,17 @@ UIMgr::~UIMgr()
 
 }
 
-int* UIMgr::getHeartColorLine(int row)
+int* UIMgr::getFullHeartColorLine(int row)
 {
-	return heart[row];
+	return fullHeart[row];
+}
+
+int* UIMgr::getHalfHeartColorLine(int row)
+{
+	return halfHeart[row];
+}
+
+int* UIMgr::getEmptyHeartColorLine(int row)
+{
+	return emptyHeart[row];
 }

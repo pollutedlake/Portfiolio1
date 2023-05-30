@@ -13,17 +13,24 @@ Player::Player()
 	attRate = 1500;
 	att = 10;
 	maxHp = 6;
-	curHp = maxHp;
-	for (int i = 0; i < 26; i++)
+	curHp = 3;
+	walkIndex = 0;
+	isAttack = false;
+	isWalk = false;
+	for(int k = 0; k < 7; k++)
 	{
-		for (int j = 0; j < 29; j++)
+		for (int i = 0; i < 26; i++)
 		{
-			leftIdleHead[i][j] = rightIdleHead[i][28 - j];
-			if (i > 10)
+			for (int j = 0; j < 29; j++)
 			{
-				continue;
+				leftIdleHead[i][j] = rightIdleHead[i][28 - j];
+				leftAttackHead[i][j] = rightAttackHead[i][28 - j];
+				if (i > 10)
+				{
+					continue;
+				}
+				leftIdleBody[k][i][j] = rightIdleBody[k][i][28 - j];
 			}
-			leftIdleBody[i][j] = rightIdleBody[i][28 - j];
 		}
 	}
 }
@@ -35,6 +42,12 @@ Player::~Player()
 
 void Player::move(int x, int y)
 {	
+	if(!isWalk)
+	{
+		isWalk = true;
+		walkTime = clock();
+	}
+	idleTime = clock();
 	if((position.first > 20 || x >= 0) && (position.first < 271 || x <= 0) )
 	{
 		position.first += x * speed;
@@ -52,14 +65,26 @@ int* Player::getColorLine(int row)
 	{
 		if (lookAt.first > 0)
 		{
+			if (isAttack)
+			{
+				return rightAttackHead[row];
+			}
 			return rightIdleHead[row];
 		}
 		else if (lookAt.first < 0)
 		{
+			if (isAttack)
+			{
+				return leftAttackHead[row];
+			}
 			return leftIdleHead[row];
 		}
 		else if(lookAt.second > 0)
 		{
+			if (isAttack)
+			{
+				return frontAttackHead[row];
+			}
 			return frontIdleHead[row];
 		}
 		return backIdleHead[row];
@@ -68,19 +93,39 @@ int* Player::getColorLine(int row)
 	{
 		if (lookAt.first > 0)
 		{
-			return rightIdleBody[row - 26];
+			return rightIdleBody[walkIndex][row - 26];
 		}
 		else if (lookAt.first < 0)
 		{
-			return leftIdleBody[row - 26];
+			return leftIdleBody[walkIndex][row - 26];
 		}
-		return frontIdleBody[row - 26];
+		return frontIdleBody[walkIndex][row - 26];
 	}
 }
 
 void Player::Update()
 {
 	curTime = clock();
+	if (isAttack)
+	{
+		if (curTime - attTime > 100)
+		{
+			isAttack = false;
+		}
+	}
+	if (isWalk)
+	{
+		if (curTime - walkTime > 100)
+		{
+			walkIndex = (walkIndex + 1) % 7;
+			walkTime = curTime;
+		}
+		if (curTime - idleTime > 300)
+		{
+			isWalk = false;
+			walkIndex = 0;
+		}
+	}
 }
 
 const char* Player::getClassName()
@@ -94,6 +139,8 @@ Projectile* Player::attack()
 	{
 		Projectile* projectile = new Projectile(position.first + 11 + (lookAt.first > 0 ? 19 : (18 * lookAt.first)), position.second + 12 + (lookAt.second > 0 ? 22 : (19 * lookAt.second)), lookAt);
 		oldTime = curTime;
+		attTime = clock();
+		isAttack = true;
 		return projectile;
 	}
 }
