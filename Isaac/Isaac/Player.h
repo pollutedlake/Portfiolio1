@@ -6,12 +6,10 @@
 #include "Projectile.h"
 using namespace std;
 
-#define FRONTIDLE		0
 
 class Player : public Object
 {
 private:
-int motion;
 int speed;
 pair<int, int> lookAt;
 
@@ -331,26 +329,30 @@ int rightAttackHead[26][29] = { {99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,
 
 int leftAttackHead[26][29];
 
-clock_t curTime, oldTime, attTime, walkTime, idleTime;
+clock_t curTime, oldTime, attTime, walkTime, idleTime, invincibilityTime, twinkleTime;
 int isWalk;
 
+bool isRed;
 int att;
 int attRate;
 int curHp;
 int maxHp;
 int walkIndex;
 bool isAttack;
+bool invincibility;
 
 public:
 	Player();
 	~Player();
 
+	void getDamage(int damage);
 	int getMaxHp() { return maxHp; }
 	int getCurHp() { return curHp; }
 	void Update();
 	void move(int x, int y);
 	const char* getClassName();
 	int* getColorLine(int row);
+	int* getRedPlayer(int* source);
 	Projectile* attack();
 };
 

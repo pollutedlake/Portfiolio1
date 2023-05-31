@@ -1,8 +1,7 @@
 #pragma once
 #include<utility>
 #include<typeinfo>
-#include "Object.h"
-#include "Enemy.h"
+#include"Object.h"
 #include "Sucker.h"
 #include "Fatty.h"
 using namespace std;

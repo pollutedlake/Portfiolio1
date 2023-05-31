@@ -1,12 +1,12 @@
 #pragma once
 #include "DoubleBuffering.h"
 #include "Player.h"
+#include "Coin.h"
 #include<Windows.h>
 #include<conio.h>
 #include <time.h>
 #include "Room.h"
 #include "Sucker.h"
-#include "Object.h"
 #include "Fatty.h"
 #include "Map.h"
 #include "StartScene.h"
@@ -28,6 +28,7 @@ private:
 	Room* room;
 	vector<Object*> objects;
 	UIMgr* uiMgr;
+	Coin* coin;
 
 public:
 	Issac();

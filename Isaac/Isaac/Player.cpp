@@ -3,20 +3,21 @@
 Player::Player()
 {	
 	position = make_pair(160, 90);
-	motion = FRONTIDLE;
 	dotWidth = 29;
 	dotHeight = 37;
 	speed = 5;
 	lookAt = make_pair(0, 1);
 	active = true;
 	oldTime = clock();
-	attRate = 1500;
+	attRate = 1000;
 	att = 10;
 	maxHp = 6;
-	curHp = 3;
+	curHp = maxHp;
 	walkIndex = 0;
 	isAttack = false;
 	isWalk = false;
+	invincibility = false;
+	isRed = false;
 	for(int k = 0; k < 7; k++)
 	{
 		for (int i = 0; i < 26; i++)
@@ -67,40 +68,57 @@ int* Player::getColorLine(int row)
 		{
 			if (isAttack)
 			{
-				return rightAttackHead[row];
+				return isRed ? getRedPlayer(rightAttackHead[row]) : rightAttackHead[row];
 			}
-			return rightIdleHead[row];
+			return isRed ? getRedPlayer(rightIdleHead[row]) : rightIdleHead[row];
 		}
 		else if (lookAt.first < 0)
 		{
 			if (isAttack)
 			{
-				return leftAttackHead[row];
+				return isRed ? getRedPlayer(leftAttackHead[row]) : leftAttackHead[row];
 			}
-			return leftIdleHead[row];
+			return isRed ? getRedPlayer(leftIdleHead[row]) : leftIdleHead[row];
 		}
 		else if(lookAt.second > 0)
 		{
 			if (isAttack)
 			{
-				return frontAttackHead[row];
+				return isRed ? getRedPlayer(frontAttackHead[row]) : frontAttackHead[row];
 			}
-			return frontIdleHead[row];
+			return isRed ? getRedPlayer(frontIdleHead[row]) : frontIdleHead[row];
 		}
-		return backIdleHead[row];
+		return isRed ? getRedPlayer(backIdleHead[row]) : backIdleHead[row];
 	}
 	else
 	{
 		if (lookAt.first > 0)
 		{
-			return rightIdleBody[walkIndex][row - 26];
+			return isRed ? getRedPlayer(rightIdleBody[walkIndex][row - 26]) : rightIdleBody[walkIndex][row - 26];
 		}
 		else if (lookAt.first < 0)
 		{
-			return leftIdleBody[walkIndex][row - 26];
+			return isRed ? getRedPlayer(leftIdleBody[walkIndex][row - 26]) : leftIdleBody[walkIndex][row - 26];
 		}
-		return frontIdleBody[walkIndex][row - 26];
+		return isRed ? getRedPlayer(frontIdleBody[walkIndex][row - 26]) : frontIdleBody[walkIndex][row - 26];
 	}
+}
+
+int* Player::getRedPlayer(int* source)
+{
+	int red[29];
+	for (int i = 0; i < 29; i++)
+	{
+		if (source[i] == 14)
+		{
+			red[i] = 4;
+		}
+		else
+		{
+			red[i] = source[i];
+		}
+	}
+	return red;
 }
 
 void Player::Update()
@@ -126,6 +144,19 @@ void Player::Update()
 			walkIndex = 0;
 		}
 	}
+	if (invincibility)
+	{
+		if (curTime - twinkleTime > 200)
+		{
+			twinkleTime = curTime;
+			isRed = !isRed;
+		}
+		if (curTime - invincibilityTime > 2000)
+		{
+			invincibility = false;
+			isRed = false;
+		}
+	}
 }
 
 const char* Player::getClassName()
@@ -142,5 +173,21 @@ Projectile* Player::attack()
 		attTime = clock();
 		isAttack = true;
 		return projectile;
+	}
+}
+
+void Player::getDamage(int damage)
+{
+	if (!invincibility)
+	{
+		curHp -= damage;
+		invincibility = true;
+		twinkleTime = clock();
+		isRed = true;
+		invincibilityTime = clock();
+		if (curHp <= 0)
+		{
+			curHp = 0;
+		}
 	}
 }

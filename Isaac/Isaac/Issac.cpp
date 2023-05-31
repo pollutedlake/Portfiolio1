@@ -12,6 +12,7 @@ Issac::Issac()
 	infoIndex = 0;
 	isStartScene = true;
 	uiMgr = new UIMgr();
+	coin = new Coin();
 }
 
 Issac::~Issac()
@@ -22,6 +23,7 @@ Issac::~Issac()
 	delete room;
 	delete map;
 	delete startScene;
+	delete coin;
 }
 
 void Issac::startGame()
@@ -73,7 +75,7 @@ void Issac::startGame()
 			{
 				objects.push_back(*it);
 			}
-			room->setEnter();
+			room->setEnter(player->getPosition());
 		}
 		// 방안에 몬스터가 다 죽으면 방 클리어
 		if (room->getEnemyN() == 0)
@@ -95,7 +97,7 @@ void Issac::startGame()
 						{
 							if (room->getLeft() != nullptr)
 							{
-								player->setPosiiton(make_pair(270, player->getPosition().second));
+								player->setPosition(make_pair(270, player->getPosition().second));
 								map->setCurRoom(room->getLeft());
 								map->update(-1, 0);
 								continue;
@@ -114,7 +116,7 @@ void Issac::startGame()
 						{
 							if (room->getRight() != nullptr)
 							{
-								player->setPosiiton(make_pair(20, player->getPosition().second));
+								player->setPosition(make_pair(20, player->getPosition().second));
 								map->setCurRoom(room->getRight());
 								map->update(1, 0);
 								continue;
@@ -130,7 +132,7 @@ void Issac::startGame()
 						{
 							if (room->getUp() != nullptr)
 							{
-								player->setPosiiton(make_pair(player->getPosition().first, 127));
+								player->setPosition(make_pair(player->getPosition().first, 127));
 								map->setCurRoom(room->getUp());
 								map->update(0, -1);
 								continue;
@@ -146,7 +148,7 @@ void Issac::startGame()
 						{
 							if (room->getDown() != nullptr)
 							{
-								player->setPosiiton(make_pair(player->getPosition().first, 15));
+								player->setPosition(make_pair(player->getPosition().first, 15));
 								map->setCurRoom(room->getDown());
 								map->update(0, 1);
 								continue;
@@ -197,6 +199,10 @@ void Issac::startGame()
 		{
 			for (int j = 0; j < 20; j++)
 			{
+				if (i == 19) {
+					rightDoor[i][j] = 0;
+					continue;
+				}
 				if ((i == 0) || (i == 38))
 				{
 					if (j < 18)
@@ -209,19 +215,22 @@ void Issac::startGame()
 				}
 				else if ((i == 1) || (i == 37))
 				{
-					if (j != 18)
+					if (j < 18)
 					{
-						rightDoor[i][j] = 99;
+						rightDoor[i][j] = room->isClear() ? 0 : 99;
 					}
-					if (j == 18)
+					else if (j == 18)
 					{
 						rightDoor[i][j] = 0;
+					}
+					else {
+						rightDoor[i][j] = 99;
 					}
 				}
 				else {
 					if (j < 19)
 					{
-						rightDoor[i][j] = 99;
+						rightDoor[i][j] = room->isClear() ? 0 : 99;
 					}
 					else {
 						rightDoor[i][j] = 0;
@@ -232,7 +241,12 @@ void Issac::startGame()
 		for (int i = 0; i < 15; i++)
 		{
 			for (int j = 0; j < 29; j++)
-			{
+			{	
+				if (j == 14)
+				{
+					upDoor[i][j] = 0;
+					continue;
+				}
 				if (i == 0)
 				{
 					if (j < 2 || j > 26)
@@ -252,7 +266,7 @@ void Issac::startGame()
 					}
 					else
 					{
-						upDoor[i][j] = 99;
+						upDoor[i][j] = room->isClear() ? 0 : 99;
 					}
 				}
 				else
@@ -263,7 +277,7 @@ void Issac::startGame()
 					}
 					else
 					{
-						upDoor[i][j] = 99;
+						upDoor[i][j] = room->isClear() ? 0 : 99;
 					}
 				}
 			}
@@ -337,6 +351,7 @@ void Issac::startGame()
 		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
 		{
 			(*objectIter)->Update();
+			(*objectIter)->setDirToPlayer(player->getPosition());
 			bool isCollision = false;
 			for (int i = 0; i < (*objectIter)->getDotHeight(); i++)
 			{
@@ -349,6 +364,13 @@ void Issac::startGame()
 					screenColor[i + (*objectIter)->getPosition().second][j + (*objectIter)->getPosition().first] = (*objectIter)->getColorLine(i)[j];
 					if (info[i + (*objectIter)->getPosition().second][j + (*objectIter)->getPosition().first] >= 0)
 					{
+						if ((*objectIter)->getClassName() == typeid(Sucker*).name() || (*objectIter)->getClassName() == typeid(Fatty*).name())
+						{
+							if (info[i + (*objectIter)->getPosition().second][j + (*objectIter)->getPosition().first] == 0)
+							{
+								player->getDamage(((Enemy*)(*objectIter))->getAtt());
+							}
+						}
 						(*objectIter)->collision(objects.at(info[i + (*objectIter)->getPosition().second][j + (*objectIter)->getPosition().first]));
 						isCollision = true;
 						break;
@@ -399,6 +421,7 @@ void Issac::startGame()
 				screenColor[i + 5][j + 290] = map->getMiniMap(i)[j];
 			}
 		}
+		// 하트 그리기
 		for (int i = 0; i < (player->getCurHp() / 2); i++)
 		{
 			for (int j = 0; j < 10; j++)
@@ -437,8 +460,20 @@ void Issac::startGame()
 					{
 						continue;
 					}
-					screenColor[j][k + 12 * ((player->getCurHp() / 2) + player->getCurHp() % 2)] = uiMgr->getEmptyHeartColorLine(j)[k];
+					screenColor[j][k + 12 * (((player->getCurHp() / 2) + player->getCurHp() % 2) + i)] = uiMgr->getEmptyHeartColorLine(j)[k];
 				}
+			}
+		}
+		// 코인 그리기
+		for (int i = 0; i < 13; i++)
+		{
+			for (int j = 0; j < 25; j++)
+			{
+				if (coin->getColorLine(i)[j] == 99)
+				{
+					continue;
+				}
+				screenColor[i][60 + j] = coin->getColorLine(i)[j];
 			}
 		}
 		render();

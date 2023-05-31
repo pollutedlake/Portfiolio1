@@ -40,12 +40,20 @@ void Map::createRooms()
 		{
 			if (map[i][j] != 0)
 			{
-				rooms[i][j] = new Room();
+				if (map[i][j] == 1)
+				{
+					rooms[i][j] = new Room(1);
+					startRoom = rooms[i][j];
+				}
+				else
+				{
+					rooms[i][j] = new Room();
+				}
 			}
-			if (map[i][j] == 1)
+			/*if (map[i][j] == 1)
 			{
 				startRoom = rooms[i][j];
-			}
+			}*/
 		}
 	}
 	for (int i = 0; i < 5; i++)
@@ -86,21 +94,6 @@ void Map::createRooms()
 		}
 	}
 	curRoom = startRoom;
-	/*random_device oRandomDevice;
-	mt19937_64 rnd(oRandomDevice);
-	uniform_int_distribution<int> rangeRoom(0, 4);
-	map[rangeRoom(rnd)][rangeRoom(rnd)] = 1;
-	while(true)
-	{
-		int bossRoomRow = rangeRoom(rnd);
-		int bossRoomCol = rangeRoom(rnd);
-		if (map[bossRoomRow][bossRoomCol] != 1)
-		{
-			map[bossRoomRow][bossRoomCol] = 2;
-			break;
-		}
-	}*/
-
 }
 
 void Map::update(int x, int y)

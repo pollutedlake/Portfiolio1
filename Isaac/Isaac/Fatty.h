@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include <time.h>
 
 class Fatty : public Enemy
 {
@@ -42,11 +43,16 @@ private:
 							  {99,	99,	99,	99,	99,	99,	0,	0,	0,	0,	99,	99,	99,	0,	0,	0,	0,	0,	0,	99,	99,	99,	0,	0,	0,	0,	99,	99,	99,	99,	99,	99},
 							  {99,	99,	99,	99,	99,	99,	99,	99,	0,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	0,	99,	99,	99,	99,	99,	99,	99,	99}
 	};
+
+	clock_t curTime;
 public:
 	Fatty(int x, int y);
 	~Fatty();
 
+	void Update();
 	const char* getClassName();
 	int* getColorLine(int row);
+
+	int* getRedLine(int* source);
 };
 

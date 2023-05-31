@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <time.h>
 #include "Object.h"
 
 using namespace std;
@@ -8,12 +9,19 @@ class Enemy : public Object
 protected:
 int curHp;
 int maxHp;
-int dir;
+pair<int, int> dir;
+int att;
+bool isRed;
+bool isTwinkle;
+clock_t twinkleTime, redTime;
+int velocity;
 
 public:
 	Enemy();
 	~Enemy();
 	void getDamage(int damage);
-	int getDir() { return dir; }
+	int getAtt() { return att; }
+	pair<int, int> getDir() { return dir; }
+	void setDirToPlayer(pair<int, int> playerPos);
 };
 

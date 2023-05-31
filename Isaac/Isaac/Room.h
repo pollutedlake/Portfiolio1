@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include<random>
+#include<Windows.h>
 #include"Sucker.h"
 #include"Fatty.h"
 using namespace std;
@@ -23,9 +24,10 @@ private:
 
 public:
 	Room();
+	Room(int startRoom);
 	~Room();
 
-	void setEnter() { enter = true;; }
+	void setEnter(pair<int, int> playerPos);
 	bool getEnter() { return enter; }
 	void dieEnemy() { enemyN -= 1; }
 	int getEnemyN() { return enemyN; }

@@ -55,5 +55,6 @@ public:
 	void Update();
 	const char* getClassName();
 	int* getColorLine(int row);
+	int* getRedLine(int* source);
 };
 
