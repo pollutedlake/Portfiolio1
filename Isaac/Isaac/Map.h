@@ -7,14 +7,14 @@ class Map
 {
 private:
 	int map[5][5] = { {0, 0, 3, 0, 0},
-					  {0, 2, 3, 3, 3},
+					  {0, 2, 1, 3, 3},
 					  {3, 0, 3, 0, 3},
 					  {3, 3, 3, 3, 0},
-					  {0, 3, 0, 1, 0}
+					  {0, 3, 0, 3, 0}
 	};
 	int miniMap[20][20];
-	int playerPosCol = 4;
-	int playerPosRow = 3;
+	int playerPosCol;
+	int playerPosRow;
 	Room* startRoom;
 	Room* curRoom;
 	Room* rooms[5][5];

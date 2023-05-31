@@ -36,8 +36,8 @@ void Sucker::Update()
 	{
 		for (int j = 0; j < 14; j++)
 		{
-			flyLeft[i][j] = flyRight[i][j];
-			flyLeft2[i][j] = flyRight2[i][j];
+			flyLeft[i][j] = flyRight[i][13 - j];
+			flyLeft2[i][j] = flyRight2[i][13 - j];
 		}
 	}
 	if (curTime - twinkleTime > 2000)
@@ -81,9 +81,23 @@ int* Sucker::getColorLine(int row)
 {
 	if(flyMotion)
 	{
-		return isRed ? getRedLine(flyRight[row]) : flyRight[row];
+		if(dir.first > 0)
+		{
+			return isRed ? getRedLine(flyRight[row]) : flyRight[row];
+		}
+		else
+		{
+			return isRed ? getRedLine(flyLeft[row]) : flyLeft[row];
+		}
 	}
-	return isRed ? getRedLine(flyRight2[row]) : flyRight2[row];
+	if(dir.first > 0)
+	{
+		return isRed ? getRedLine(flyRight2[row]) : flyRight2[row];
+	}
+	else
+	{
+		return isRed ? getRedLine(flyLeft2[row]) : flyLeft2[row];
+	}
 }
 
 int* Sucker::getRedLine(int* source)

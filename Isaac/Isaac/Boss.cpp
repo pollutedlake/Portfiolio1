@@ -2,7 +2,9 @@
 
 Boss::Boss()
 {
-
+	dotWidth = 48;
+	dotHeight = 33;
+	active = true;
 }
 
 Boss::~Boss()
@@ -23,4 +25,14 @@ void Boss::Update()
 		isRed = !isRed;
 		redTime = curTime;
 	}
+}
+
+int* Boss::getColorLine(int row)
+{
+	return leftIdle[row];
+}
+
+const char* Boss::getClassName()
+{
+	return typeid(this).name();
 }

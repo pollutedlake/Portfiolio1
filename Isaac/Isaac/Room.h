@@ -3,6 +3,7 @@
 #include<random>
 #include<Windows.h>
 #include"Sucker.h"
+#include "Boss.h"
 #include"Fatty.h"
 using namespace std;
 #define ROOMWIDTH		280
@@ -24,7 +25,7 @@ private:
 
 public:
 	Room();
-	Room(int startRoom);
+	Room(int roomType);
 	~Room();
 
 	void setEnter(pair<int, int> playerPos);

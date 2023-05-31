@@ -1,3 +1,8 @@
-﻿  Sucker.cpp
-C:\Users\언리얼\Desktop\박상현\Portfolio1\Portfiolio1\Isaac\Isaac\Sucker.cpp(103): warning C4172: 지역 변수 또는 임시: red의 주소를 반환하고 있습니다.
-  Isaac.vcxproj -> C:\Users\언리얼\Desktop\박상현\Portfolio1\Portfiolio1\Isaac\Debug\Isaac.exe
+﻿  Boss.cpp
+  Issac.cpp
+  Map.cpp
+  Room.cpp
+  main.cpp
+C:\Users\psh95\OneDrive\바탕 화면\상현\공부\GameAcademy\Porfolio1\Portfiolio1\Isaac\Isaac\main.cpp(4,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+  코드를 생성하고 있습니다...
+  Isaac.vcxproj -> C:\Users\psh95\OneDrive\바탕 화면\상현\공부\GameAcademy\Porfolio1\Portfiolio1\Isaac\Debug\Isaac.exe

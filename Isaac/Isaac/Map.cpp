@@ -44,16 +44,18 @@ void Map::createRooms()
 				{
 					rooms[i][j] = new Room(1);
 					startRoom = rooms[i][j];
+					playerPosCol = i;
+					playerPosRow = j;
+				}
+				else if (map[i][j] == 2)
+				{
+					rooms[i][j] = new Room(2);
 				}
 				else
 				{
 					rooms[i][j] = new Room();
 				}
 			}
-			/*if (map[i][j] == 1)
-			{
-				startRoom = rooms[i][j];
-			}*/
 		}
 	}
 	for (int i = 0; i < 5; i++)
