@@ -48,6 +48,7 @@ private:
 	clock_t curTime, oldTime;
 	int flyRate;
 	int flyMotion;
+
 public:
 	Sucker(int x, int y);
 	~Sucker();

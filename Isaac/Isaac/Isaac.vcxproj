@@ -138,7 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="DoubleBuffering.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -155,7 +154,6 @@
     <ClCompile Include="UIMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Boss.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="DoubleBuffering.h" />
     <ClInclude Include="Enemy.h" />

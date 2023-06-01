@@ -18,6 +18,7 @@ Player::Player()
 	isWalk = false;
 	invincibility = false;
 	isRed = false;
+	money = 0;
 	for(int k = 0; k < 7; k++)
 	{
 		for (int i = 0; i < 26; i++)

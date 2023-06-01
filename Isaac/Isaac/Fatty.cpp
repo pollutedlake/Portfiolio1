@@ -14,6 +14,7 @@ Fatty::Fatty(int x, int y)
 	walkIndex = 0;
 	isWalk = false;
 	check = false;
+	price = 2;
 	for (int i = 0; i < 7; i++)
 	{
 		for (int j = 0; j < 19; j++)

@@ -34,36 +34,31 @@ Room::Room()
 
 Room::Room(int roomType)
 {
+	for (int i = 0; i < ROOMHEIGHT; i++)
+	{
+		for (int j = 0; j < ROOMWIDTH; j++)
+		{
+			color[i][j] = 6;
+			info[i][j] = -1;
+		}
+	}
 	if(roomType == 1)
 	{
-		for (int i = 0; i < ROOMHEIGHT; i++)
-		{
-			for (int j = 0; j < ROOMWIDTH; j++)
-			{
-				color[i][j] = 6;
-				info[i][j] = -1;
-			}
-		}
 		clear = true;
 		enter = true;
 		enemyN = 0;
 	}
 	else if (roomType == 2)
 	{
-		for (int i = 0; i < ROOMHEIGHT; i++)
-		{
-			for (int j = 0; j < ROOMWIDTH; j++)
-			{
-				color[i][j] = 6;
-				info[i][j] = -1;
-			}
-		}
-		clear = false;
+		clear = true;
 		enter = false;
-		Enemy* boss = new Boss();
-		boss->setPosition(make_pair(136, 74));
-		enemies.push_back(boss);
-		enemyN = 1;
+		enemyN = 0;
+	}
+	else if (roomType == 3)
+	{
+		clear = true;
+		enter = false;
+		enemyN = 0;
 	}
 }
 
@@ -80,14 +75,14 @@ Room::~Room()
 	delete down;
 }
 
-int* Room::getRoomColorLine(int col)
+int* Room::getRoomColorLine(int row)
 {
-	return color[col];
+	return color[row];
 }
 
-int* Room::getRoomInfoLine(int col)
+int* Room::getRoomInfoLine(int row)
 {
-	return info[col];
+	return info[row];
 }
 
 void Room::setEnter(pair<int, int> playerPos)
@@ -100,10 +95,6 @@ void Room::setEnter(pair<int, int> playerPos)
 	enter = true;
 	for (auto it = enemies.begin(); it != enemies.end(); ++it)
 	{
-		if ((*it)->getClassName() == typeid(Boss*).name())
-		{
-			return;
-		}
 		if (playerPos.first < 21)
 		{
 			switch (sector(rnd))

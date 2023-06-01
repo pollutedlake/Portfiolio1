@@ -17,6 +17,7 @@ Sucker::Sucker(int x, int y)
 	isRed = false;
 	isTwinkle = false;
 	velocity = 2;
+	price = 1;
 }
 
 Sucker::~Sucker()

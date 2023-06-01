@@ -51,6 +51,10 @@ void Map::createRooms()
 				{
 					rooms[i][j] = new Room(2);
 				}
+				else if (map[i][j] == 5)
+				{
+					rooms[i][j] = new Room(3);
+				}
 				else
 				{
 					rooms[i][j] = new Room();
@@ -147,6 +151,9 @@ void Map::updateMiniMap()
 				{
 					color = 8;
 				}
+				break;
+			case 5:
+				color = 1;
 				break;
 			}
 			if (color == 99)

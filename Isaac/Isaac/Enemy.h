@@ -15,12 +15,14 @@ bool isRed;
 bool isTwinkle;
 clock_t twinkleTime, redTime;
 int velocity;
+int price;
 
 public:
 	Enemy();
 	~Enemy();
 	void getDamage(int damage);
 	int getAtt() { return att; }
+	int getPrice() { return price; }
 	pair<int, int> getDir() { return dir; }
 	void setDirToPlayer(pair<int, int> playerPos);
 };

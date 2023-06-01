@@ -28,5 +28,7 @@ public:
 	virtual const char* getClassName() { return ""; }
 
 	virtual int* getColorLine(int row) = 0;
+
+	virtual int getPrice() { return 0; };
 };
 

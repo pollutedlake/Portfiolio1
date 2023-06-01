@@ -1,5 +1,8 @@
 #pragma once
-class Coin
+#include "Object.h"
+#include "Player.h"
+#include <string>
+class Coin : public Object
 {
 private:
 	int color[13][25] = { {99,	99,	99,	99,	99,	99,	99,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	99,	99,	99,	99,	99,	99,	99,	99},
@@ -16,9 +19,14 @@ private:
 						  {99,	99,	99,	99,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	99,	99,	99,	99},
 						  {99,	99,	99,	99,	99,	99,	99,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	99,	99,	99,	99,	99,	99,	99,	99}
 	};
+
+	int price;
 public:
 	Coin();
+	Coin(pair<int, int> _position, int _price);
 	~Coin();
 	int* getColorLine(int row);
+
+	void collision(Object* object);
 };
 

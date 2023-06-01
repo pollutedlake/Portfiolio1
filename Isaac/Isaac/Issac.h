@@ -12,6 +12,7 @@
 #include "StartScene.h"
 #include "UIMgr.h"
 #include <vector>
+#include <fstream>
 using namespace std;
 
 class Issac
@@ -29,10 +30,13 @@ private:
 	vector<Object*> objects;
 	UIMgr* uiMgr;
 	Coin* coin;
+	Coin* dropCoin;
 
 public:
 	Issac();
 	~Issac();
+
+	void saveGame();
 	void startGame();
 	void render();
 };

@@ -3,7 +3,6 @@
 #include<random>
 #include<Windows.h>
 #include"Sucker.h"
-#include "Boss.h"
 #include"Fatty.h"
 using namespace std;
 #define ROOMWIDTH		280

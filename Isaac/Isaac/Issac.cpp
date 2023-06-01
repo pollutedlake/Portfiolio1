@@ -384,11 +384,13 @@ void Issac::startGame()
 			}
 			if (!((*objectIter)->isActive()))
 			{
-				if (((*objectIter)->getClassName() == typeid(Sucker*).name()) || ((*objectIter)->getClassName() == typeid(Fatty*).name()))
+				if ((*objectIter)->getClassName() == typeid(Sucker*).name() || (*objectIter)->getClassName() == typeid(Fatty*).name())
 				{
 					room->dieEnemy();
+					//dropCoin = new Coin((*objectIter)->getPosition(), (*objectIter)->getPrice());
+					//objects.push_back(dropCoin);
 				}
-				delete* objectIter;
+				delete *objectIter;
 				objects.erase(objectIter--);
 				continue;
 			}
@@ -476,6 +478,8 @@ void Issac::startGame()
 				screenColor[i][60 + j] = coin->getColorLine(i)[j];
 			}
 		}
+		screenColor[10][100] = player->getMoney() / 10;
+		screenColor[10][101] = player->getMoney() % 10;
 		render();
 	}
 }
@@ -485,4 +489,9 @@ void Issac::render()
 	doubleBuffering->screenClear();
 	doubleBuffering->screenPrint(screenColor);
 	doubleBuffering->screenFlipping();
+}
+
+void Issac::saveGame()
+{
+
 }

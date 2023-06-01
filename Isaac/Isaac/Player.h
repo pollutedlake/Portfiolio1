@@ -340,6 +340,7 @@ int maxHp;
 int walkIndex;
 bool isAttack;
 bool invincibility;
+int money;
 
 public:
 	Player();
@@ -348,6 +349,8 @@ public:
 	void getDamage(int damage);
 	int getMaxHp() { return maxHp; }
 	int getCurHp() { return curHp; }
+	int getMoney() { return money; }
+	void plusMoney(int _money) { money += _money; }
 	void Update();
 	void move(int x, int y);
 	const char* getClassName();
