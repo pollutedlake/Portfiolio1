@@ -25,10 +25,14 @@ public:
 
 	Room* getStartRoom() { return startRoom; }
 	void setCurRoom(Room* _room) { curRoom = _room; }
+	void setCurRoom(int col, int row);
 	Room* getCurRoom() { return curRoom; }
 	void createRooms();
+	void setEnter(int col, int row);
 	void update(int x, int y);
 	void updateMiniMap();
 	int* getMiniMap(int row);
+	int* getMap(int col);
+	void setMap(int _map[5][5]);
 };
 

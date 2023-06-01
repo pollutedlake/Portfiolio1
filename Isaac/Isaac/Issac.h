@@ -39,5 +39,6 @@ public:
 	void saveGame();
 	void startGame();
 	void render();
+	void loadGame();
 };
 

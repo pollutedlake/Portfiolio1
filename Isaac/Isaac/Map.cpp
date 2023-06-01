@@ -180,3 +180,32 @@ int* Map::getMiniMap(int row)
 {
 	return miniMap[row];
 }
+
+int* Map::getMap(int col)
+{
+	return map[col];
+}
+
+void Map::setMap(int _map[5][5])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			map[i][j] = _map[i][j];
+		}
+	}
+}
+
+void Map::setCurRoom(int col, int row)
+{
+	playerPosCol = col;
+	playerPosRow = row;
+	curRoom = rooms[col][row];
+}
+
+void Map::setEnter(int col, int row)
+{
+	rooms[col][row]->setEnter();
+	rooms[col][row]->setClear();
+}

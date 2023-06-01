@@ -25,3 +25,13 @@ int* UIMgr::getEmptyHeartColorLine(int row)
 {
 	return emptyHeart[row];
 }
+
+int* UIMgr::getNumber(int num, int row)
+{
+	return numbers[num][row];
+}
+
+int* UIMgr::getEqualSign(int row)
+{
+	return equalSign[row];
+}

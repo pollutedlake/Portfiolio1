@@ -348,6 +348,9 @@ public:
 
 	void getDamage(int damage);
 	int getMaxHp() { return maxHp; }
+	void setMaxHp(int _maxHp) {maxHp = _maxHp;}
+	void setcurHp(int _curHp) {curHp = _curHp;}
+	void setMoney(int _money) {money = _money;}
 	int getCurHp() { return curHp; }
 	int getMoney() { return money; }
 	void plusMoney(int _money) { money += _money; }

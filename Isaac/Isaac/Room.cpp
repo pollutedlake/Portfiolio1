@@ -11,6 +11,7 @@ Room::Room()
 		}
 	}
 	clear = false;
+	isSaveRoom = false;
 	random_device oRandomDevice;
 	mt19937_64 rnd(oRandomDevice());
 	uniform_int_distribution<int> enemyNRange(1, 4);
@@ -47,18 +48,21 @@ Room::Room(int roomType)
 		clear = true;
 		enter = true;
 		enemyN = 0;
+		isSaveRoom = false;
 	}
 	else if (roomType == 2)
 	{
 		clear = true;
 		enter = false;
 		enemyN = 0;
+		isSaveRoom = false;
 	}
 	else if (roomType == 3)
 	{
 		clear = true;
 		enter = false;
 		enemyN = 0;
+		isSaveRoom = true;
 	}
 }
 
@@ -85,7 +89,7 @@ int* Room::getRoomInfoLine(int row)
 	return info[row];
 }
 
-void Room::setEnter(pair<int, int> playerPos)
+bool Room::setEnter(pair<int, int> playerPos)
 {
 	random_device oRandomDevice;
 	mt19937_64 rnd(oRandomDevice());
@@ -158,4 +162,5 @@ void Room::setEnter(pair<int, int> playerPos)
 			}
 		}
 	}
+	return isSaveRoom;
 }

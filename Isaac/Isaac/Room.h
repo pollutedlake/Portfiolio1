@@ -4,6 +4,8 @@
 #include<Windows.h>
 #include"Sucker.h"
 #include"Fatty.h"
+#include<fstream>
+#include"player.h"
 using namespace std;
 #define ROOMWIDTH		280
 #define ROOMHEIGHT		150
@@ -21,13 +23,15 @@ private:
 	int enemyN;
 	vector<Enemy*> enemies;
 	bool enter;
+	bool isSaveRoom;
 
 public:
 	Room();
 	Room(int roomType);
 	~Room();
 
-	void setEnter(pair<int, int> playerPos);
+	bool setEnter(pair<int, int> playerPos);
+	void setEnter() { enter = true; }
 	bool getEnter() { return enter; }
 	void dieEnemy() { enemyN -= 1; }
 	int getEnemyN() { return enemyN; }

@@ -63,6 +63,11 @@ void Issac::startGame()
 				{
 					isStartScene = false;
 				}
+				if (key == 'l' || key == 'L')
+				{
+					isStartScene = false;
+					loadGame();
+				}
 			}
 			render();
 			continue;
@@ -75,7 +80,10 @@ void Issac::startGame()
 			{
 				objects.push_back(*it);
 			}
-			room->setEnter(player->getPosition());
+			if (room->setEnter(player->getPosition()))
+			{
+				saveGame();
+			}
 		}
 		// 방안에 몬스터가 다 죽으면 방 클리어
 		if (room->getEnemyN() == 0)
@@ -466,7 +474,7 @@ void Issac::startGame()
 				}
 			}
 		}
-		// 코인 그리기
+		// ui 그리기
 		for (int i = 0; i < 13; i++)
 		{
 			for (int j = 0; j < 25; j++)
@@ -478,8 +486,31 @@ void Issac::startGame()
 				screenColor[i][60 + j] = coin->getColorLine(i)[j];
 			}
 		}
-		screenColor[10][100] = player->getMoney() / 10;
-		screenColor[10][101] = player->getMoney() % 10;
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				if (uiMgr->getEqualSign(i)[j] == 99)
+				{
+					continue;
+				}
+				screenColor[6 + i][90 + j] = uiMgr->getEqualSign(i)[j];
+			}
+		}
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				if (uiMgr->getNumber(player->getMoney() / 10, i)[j] != 99)
+				{
+					screenColor[6 + i][98 + j] = uiMgr->getNumber(player->getMoney() / 10, i)[j];
+				}
+				if (uiMgr->getNumber(player->getMoney() % 10, i)[j] != 99)
+				{
+					screenColor[6 + i][103 + j] = uiMgr->getNumber(player->getMoney() % 10, i)[j];
+				}
+			}
+		}
 		render();
 	}
 }
@@ -493,5 +524,48 @@ void Issac::render()
 
 void Issac::saveGame()
 {
+	FILE* fp = NULL;
+	if (0 == fopen_s(&fp, "save.txt", "w"))
+	{
+		fprintf(fp, "%d %d %d\n", player->getMaxHp(), player->getCurHp(), player->getMoney());
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				fprintf(fp, "%d ", map->getMap(i)[j]);
+			}
+		}
+		fclose(fp);
+	}
+}
 
+void Issac::loadGame()
+{
+	FILE* fp = NULL;
+	if (0 == fopen_s(&fp, "save.txt", "r"))
+	{
+		int maxHp, curHp, money;
+		int tempMap[5][5];
+		fscanf_s(fp, "%d %d %d", &maxHp, &curHp, &money);
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				fscanf_s(fp, "%d ", &tempMap[i][j]);
+				if (tempMap[i][j] == 1)
+				{
+					map->setCurRoom(i, j);
+				}
+				else if (tempMap[i][j] == 4)
+				{
+					map->setEnter(i, j);
+				}
+			}
+		}
+		player->setMaxHp(maxHp);
+		player->setcurHp(curHp);
+		player->setMoney(money);
+		map->setMap(tempMap);
+		fclose(fp);
+	}
 }
