@@ -85,3 +85,13 @@ void DoubleBuffering::setColor(int font, int background)
 	int color = font + background * 16;
 	SetConsoleTextAttribute(g_hScreen[g_nScreenIndex], color);
 }
+
+void DoubleBuffering::changeFontSize(int fontSize)
+{
+	CONSOLE_FONT_INFOEX info = {0};
+	info.cbSize = sizeof(info);
+	info.dwFontSize.Y = fontSize;
+	info.FontWeight = FW_NORMAL;
+	wcscpy_s(info.FaceName, L"Lucida Console");
+	SetCurrentConsoleFontEx(g_hScreen[g_nScreenIndex], NULL, &info);
+}

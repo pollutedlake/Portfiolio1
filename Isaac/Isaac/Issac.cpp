@@ -13,6 +13,7 @@ Issac::Issac()
 	isStartScene = true;
 	uiMgr = new UIMgr();
 	coin = new Coin();
+	shop = new Shop();
 	fp = NULL;
 	fopen_s(&fp, "save.txt", "r");
 }
@@ -26,6 +27,7 @@ Issac::~Issac()
 	delete map;
 	delete sceneMgr;
 	delete coin;
+	delete shop;
 	fclose(fp);
 }
 
@@ -162,7 +164,7 @@ void Issac::startGame()
 		{
 			room->setClear();
 		}
-		// Player입력 받기
+		// Player 입력 받기
 		if(_kbhit())
 		{
 			int key = _getch();
@@ -212,6 +214,11 @@ void Issac::startGame()
 						{
 							if (room->getUp() != nullptr)
 							{
+								if (room->getUp()->getRoomType() == SHOP)
+								{
+									shop->startShopping(doubleBuffering, player);
+									continue;
+								}
 								player->setPosition(make_pair(player->getPosition().first, 127));
 								map->setCurRoom(room->getUp());
 								map->update(0, -1);

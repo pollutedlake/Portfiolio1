@@ -141,6 +141,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="DoubleBuffering.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Equipment.cpp" />
     <ClCompile Include="Fatty.cpp" />
     <ClCompile Include="Issac.cpp" />
     <ClCompile Include="main.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="DoubleBuffering.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Equipment.h" />
     <ClInclude Include="Fatty.h" />
     <ClInclude Include="Issac.h" />
     <ClInclude Include="Map.h" />

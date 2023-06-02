@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "SceneMgr.h"
 #include "UIMgr.h"
+#include "Shop.h"
 #include <vector>
 #include <fstream>
 using namespace std;
@@ -32,6 +33,7 @@ private:
 	Coin* coin;
 	Coin* dropCoin;
 	FILE* fp;
+	Shop* shop;
 
 public:
 	Issac();

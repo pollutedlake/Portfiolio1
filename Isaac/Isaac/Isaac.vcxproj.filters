@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="상점">
+      <UniqueIdentifier>{39596fda-ff63-493b-987e-1900568e1658}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -58,7 +61,10 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Shop.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>상점</Filter>
+    </ClCompile>
+    <ClCompile Include="Equipment.cpp">
+      <Filter>상점</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +108,10 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Shop.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>상점</Filter>
+    </ClInclude>
+    <ClInclude Include="Equipment.h">
+      <Filter>상점</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,6 +9,10 @@
 using namespace std;
 #define ROOMWIDTH		280
 #define ROOMHEIGHT		150
+#define STARTROOM		1
+#define ENDROOM			2
+#define SAVEROOM		3
+#define SHOP			4
 
 class Room
 {
@@ -25,10 +29,11 @@ private:
 	bool enter;
 	bool isSaveRoom;
 	bool isEndRoom;
+	int roomType;
 
 public:
 	Room();
-	Room(int roomType);
+	Room(int _roomType);
 	~Room();
 
 	bool getIsEndRoom() { return isEndRoom; }
@@ -37,6 +42,7 @@ public:
 	bool getEnter() { return enter; }
 	void dieEnemy() { enemyN -= 1; }
 	int getEnemyN() { return enemyN; }
+	int getRoomType() { return roomType; }
 	void setRight(Room* _right) { right = _right; }
 	void setLeft(Room* _left) { left = _left; }
 	void setUp(Room* _up) { up = _up; }

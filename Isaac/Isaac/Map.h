@@ -6,7 +6,7 @@ using namespace std;
 class Map
 {
 private:
-	int map[5][5] = { {0, 0, 3, 0, 0},
+	int map[5][5] = { {0, 0, 6, 0, 0},
 					  {0, 2, 5, 3, 3},
 					  {3, 0, 3, 0, 3},
 					  {3, 3, 5, 3, 0},

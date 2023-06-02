@@ -192,3 +192,59 @@ void Player::getDamage(int damage)
 		}
 	}
 }
+
+void Player::putInventory(Equipment* equipment)
+{
+	inventory.push_back(equipment);
+}
+
+void Player::takeOutEquipment(int index)
+{
+	inventory.erase(inventory.begin() + index);
+}
+
+void Player::wearEquipment(int index)
+{
+	Equipment* tempE = inventory.at(index);
+	if(equipment != nullptr)
+	{
+		putInventory(equipment);
+		switch (equipment->getEquipmentId())
+		{
+		case 0:
+			maxHp -= 2;
+			if (curHp > maxHp)
+			{
+				curHp = maxHp;
+			}
+			break;
+		case 1:
+			att -= 10;
+			break;
+		case 2:
+			speed /= 2;
+			break;
+		case 3:
+			attRate *= 2;
+			break;
+		}
+	}
+	switch (tempE->getEquipmentId())
+	{
+	case 0:
+		maxHp += 2;
+		curHp += 2;
+		break;
+	case 1:
+		att += 10;
+		break;
+	case 2:
+		speed *= 2;
+		break;
+	case 3:
+		attRate /= 2;
+		break;
+	}
+	equipment = tempE;
+	takeOutEquipment(index);
+}

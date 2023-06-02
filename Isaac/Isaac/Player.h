@@ -2,8 +2,10 @@
 #include<utility>
 #include<conio.h>
 #include<time.h>
+#include<vector>
 #include "Object.h"
 #include "Projectile.h"
+#include "Equipment.h"
 using namespace std;
 
 
@@ -342,6 +344,9 @@ bool isAttack;
 bool invincibility;
 int money;
 
+vector<Equipment*> inventory;
+Equipment* equipment;
+
 public:
 	Player();
 	~Player();
@@ -351,8 +356,17 @@ public:
 	void setMaxHp(int _maxHp) {maxHp = _maxHp;}
 	void setcurHp(int _curHp) {curHp = _curHp;}
 	void setMoney(int _money) {money = _money;}
+	void setAtt(int _att) { att = _att; }
+	void setAttRate(int _attRate) { attRate = _attRate; }
+	int getAttRate() { return attRate; }
+	int getAtt() { return att; }
+	void setSpeed(int _speed) { speed = _speed; }
+	int getSpeed() { return speed; }
 	int getCurHp() { return curHp; }
 	int getMoney() { return money; }
+	Equipment* getEquipment() { return equipment; }
+	vector<Equipment*> getInventory() { return inventory; }
+
 	void plusMoney(int _money) { money += _money; }
 	void Update();
 	void move(int x, int y);
@@ -360,6 +374,9 @@ public:
 	int* getColorLine(int row);
 	int* getRedPlayer(int* source);
 	Projectile* attack();
+	void putInventory(Equipment* equipment);
+	void takeOutEquipment(int index);
+	void wearEquipment(int index);
 };
 
  
