@@ -24,12 +24,14 @@ private:
 	vector<Enemy*> enemies;
 	bool enter;
 	bool isSaveRoom;
+	bool isEndRoom;
 
 public:
 	Room();
 	Room(int roomType);
 	~Room();
 
+	bool getIsEndRoom() { return isEndRoom; }
 	bool setEnter(pair<int, int> playerPos);
 	void setEnter() { enter = true; }
 	bool getEnter() { return enter; }

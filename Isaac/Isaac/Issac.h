@@ -9,7 +9,7 @@
 #include "Sucker.h"
 #include "Fatty.h"
 #include "Map.h"
-#include "StartScene.h"
+#include "SceneMgr.h"
 #include "UIMgr.h"
 #include <vector>
 #include <fstream>
@@ -21,7 +21,7 @@ private:
 	Map* map;
 	bool isStartScene;
 	DoubleBuffering* doubleBuffering;
-	StartScene* startScene;
+	SceneMgr* sceneMgr;
 	int screenColor[SCREENHEIGHT][SCREENWIDTH];
 	int info[SCREENHEIGHT][SCREENWIDTH];
 	int infoIndex;
@@ -31,6 +31,7 @@ private:
 	UIMgr* uiMgr;
 	Coin* coin;
 	Coin* dropCoin;
+	FILE* fp;
 
 public:
 	Issac();

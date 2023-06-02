@@ -35,3 +35,4 @@ int* UIMgr::getEqualSign(int row)
 {
 	return equalSign[row];
 }
+

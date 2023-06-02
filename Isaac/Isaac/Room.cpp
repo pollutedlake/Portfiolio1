@@ -12,6 +12,7 @@ Room::Room()
 	}
 	clear = false;
 	isSaveRoom = false;
+	isEndRoom = false;
 	random_device oRandomDevice;
 	mt19937_64 rnd(oRandomDevice());
 	uniform_int_distribution<int> enemyNRange(1, 4);
@@ -49,6 +50,7 @@ Room::Room(int roomType)
 		enter = true;
 		enemyN = 0;
 		isSaveRoom = false;
+		isEndRoom = false;
 	}
 	else if (roomType == 2)
 	{
@@ -56,6 +58,7 @@ Room::Room(int roomType)
 		enter = false;
 		enemyN = 0;
 		isSaveRoom = false;
+		isEndRoom = true;
 	}
 	else if (roomType == 3)
 	{
@@ -63,6 +66,7 @@ Room::Room(int roomType)
 		enter = false;
 		enemyN = 0;
 		isSaveRoom = true;
+		isEndRoom = false;
 	}
 }
 

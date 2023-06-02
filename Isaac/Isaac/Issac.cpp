@@ -4,7 +4,7 @@ Issac::Issac()
 {
 	doubleBuffering = new DoubleBuffering();
 	player = new Player();
-	startScene = new StartScene();
+	sceneMgr = new SceneMgr();
 	map = new Map();
 	room = map->getCurRoom();
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
@@ -13,6 +13,8 @@ Issac::Issac()
 	isStartScene = true;
 	uiMgr = new UIMgr();
 	coin = new Coin();
+	fp = NULL;
+	fopen_s(&fp, "save.txt", "r");
 }
 
 Issac::~Issac()
@@ -22,8 +24,9 @@ Issac::~Issac()
 	delete player;
 	delete room;
 	delete map;
-	delete startScene;
+	delete sceneMgr;
 	delete coin;
+	fclose(fp);
 }
 
 void Issac::startGame()
@@ -38,22 +41,36 @@ void Issac::startGame()
 			{
 				for (int j = 0; j < 96; j++)
 				{
-					if (startScene->getColorLine(i)[j] == 99)
+					if (sceneMgr->getStartScene(i)[j] == 99)
 					{
 						continue;
 					}
-					screenColor[(SCREENHEIGHT - 79) / 2 + i][(SCREENWIDTH - 96) / 2 + j] = startScene->getColorLine(i)[j];
+					screenColor[(SCREENHEIGHT - 79) / 2 + i][(SCREENWIDTH - 96) / 2 + j] = sceneMgr->getStartScene(i)[j];
 				}
+			}
+			bool existFile;
+			if (fp == NULL)
+			{
+				existFile = false;
+			}
+			else {
+				existFile = true;
 			}
 			for (int i = 0; i < 10; i++)
 			{
 				for (int j = 0; j < 73; j++)
 				{
-					if (startScene->getPressS(i)[j] == 99)
+					if (sceneMgr->getPressS(i)[j] != 99)
 					{
-						continue;
+						screenColor[150 + i][124 + j] = sceneMgr->getPressS(i)[j];
 					}
-					screenColor[150 + i][124 + j] = startScene->getPressS(i)[j];
+					if (existFile)
+					{
+						if (sceneMgr->getPressL(i)[j] != 99 && j < 70)
+						{
+							screenColor[165 + i][124 + j] = sceneMgr->getPressL(i)[j];
+						}
+					}
 				}
 			}
 			if (_kbhit())
@@ -62,17 +79,72 @@ void Issac::startGame()
 				if (key == 's' || key == 'S')
 				{
 					isStartScene = false;
+					fclose(fp);
 				}
-				if (key == 'l' || key == 'L')
+				if ((key == 'l' || key == 'L') && existFile)
 				{
 					isStartScene = false;
+					fclose(fp);
 					loadGame();
+				}
+				if (key == 27)
+				{
+					return;
+				}
+			}
+			render();
+			continue;
+		}
+		// 게임오버 화면
+		if (player->getCurHp() == 0)
+		{
+			for (int i = 0; i < SCREENHEIGHT; i++)
+			{
+				for (int j = 0; j < SCREENWIDTH; j++)
+				{
+					if ((i > 78) && (i < 102))
+					{
+						if ((j > 140) && (j < 179))
+						{
+							screenColor[i][j] = sceneMgr->getGameOver(i - 79)[j - 141];
+						}
+						else {
+							screenColor[i][j] = 0;
+						}
+					}
+					else {
+						screenColor[i][j] = 0;
+					}
 				}
 			}
 			render();
 			continue;
 		}
 		room = map->getCurRoom();
+		if (room->getIsEndRoom())
+		{
+			for (int i = 0; i < SCREENHEIGHT; i++)
+			{
+				for (int j = 0; j < SCREENWIDTH; j++)
+				{
+					if ((i > 78) && (i < 102))
+					{
+						if ((j > 140) && (j < 179))
+						{
+							screenColor[i][j] = sceneMgr->getGameClear(i - 79)[j - 141];
+						}
+						else {
+							screenColor[i][j] = 0;
+						}
+					}
+					else {
+						screenColor[i][j] = 0;
+					}
+				}
+			}
+			render();
+			continue;
+		}
 		if (!room->getEnter())
 		{
 			vector<Enemy*> enemies = room->getEnemies();
@@ -165,12 +237,15 @@ void Issac::startGame()
 					}
 					player->move(0, 1);
 				break;
-
 				}
 			}
 			else if (key == 'a' || key == 'A')
 			{
 				objects.push_back(player->attack());
+			}
+			else if (key == 27)
+			{
+				return;
 			}
 		}
 		// 방 외곽 벽 그리기
@@ -355,11 +430,31 @@ void Issac::startGame()
 				info[i + 15][j + 20] = room->getRoomInfoLine(i)[j];
 			}
 		}
-		// object들 업데이트하고 충돌체크
+		// object들 업데이트
 		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
 		{
 			(*objectIter)->Update();
 			(*objectIter)->setDirToPlayer(player->getPosition());
+		}
+		// 비활성화된 object삭제
+		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
+		{
+			if (!((*objectIter)->isActive()))
+			{
+				if ((*objectIter)->getClassName() == typeid(Sucker*).name() || (*objectIter)->getClassName() == typeid(Fatty*).name())
+				{
+					room->dieEnemy();
+					dropCoin = new Coin((*objectIter)->getPosition(), (*objectIter)->getPrice());
+					objects.push_back(dropCoin);
+				}
+				delete* objectIter;
+				objects.erase(objectIter--);
+				continue;
+			}
+		}
+		// object정보 업데이트하면서 충돌체크
+		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
+		{
 			bool isCollision = false;
 			for (int i = 0; i < (*objectIter)->getDotHeight(); i++)
 			{
@@ -390,18 +485,18 @@ void Issac::startGame()
 					break;
 				}
 			}
-			if (!((*objectIter)->isActive()))
+			/*if (!((*objectIter)->isActive()))
 			{
 				if ((*objectIter)->getClassName() == typeid(Sucker*).name() || (*objectIter)->getClassName() == typeid(Fatty*).name())
 				{
 					room->dieEnemy();
-					//dropCoin = new Coin((*objectIter)->getPosition(), (*objectIter)->getPrice());
-					//objects.push_back(dropCoin);
+					dropCoin = new Coin((*objectIter)->getPosition(), (*objectIter)->getPrice());
+					objects.push_back(dropCoin);
 				}
 				delete *objectIter;
 				objects.erase(objectIter--);
 				continue;
-			}
+			}*/
 		}
 		// object들 그리기
 		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
@@ -524,7 +619,6 @@ void Issac::render()
 
 void Issac::saveGame()
 {
-	FILE* fp = NULL;
 	if (0 == fopen_s(&fp, "save.txt", "w"))
 	{
 		fprintf(fp, "%d %d %d\n", player->getMaxHp(), player->getCurHp(), player->getMoney());
@@ -541,7 +635,6 @@ void Issac::saveGame()
 
 void Issac::loadGame()
 {
-	FILE* fp = NULL;
 	if (0 == fopen_s(&fp, "save.txt", "r"))
 	{
 		int maxHp, curHp, money;
