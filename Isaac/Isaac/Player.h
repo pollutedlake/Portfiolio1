@@ -366,6 +366,7 @@ public:
 	int getMoney() { return money; }
 	Equipment* getEquipment() { return equipment; }
 	vector<Equipment*> getInventory() { return inventory; }
+	int getInventorySize() { return inventory.size(); }
 
 	void plusMoney(int _money) { money += _money; }
 	void Update();

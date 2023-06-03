@@ -11,6 +11,8 @@ Equipment::Equipment(const char* _name, int _price, const char* _explantion, int
 	price = _price;
 	explanation = _explantion;
 	equipmentId = id;
+	dotHeight = sizeof(itemsDot[equipmentId]) / sizeof(itemsDot[equipmentId][0]);
+	dotWidth = sizeof(itemsDot[equipmentId][0]) / sizeof(itemsDot[equipmentId][0][0]);
 }
 
 Equipment::~Equipment()

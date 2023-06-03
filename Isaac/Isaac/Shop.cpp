@@ -3,7 +3,13 @@
 Shop::Shop()
 {
 	Item heart = { "심장", 5, "최대 체력과 현재 체력이 2칸 늘어납니다." };
+	Item mushroom = {"버섯", 6, "공격력을 10 올려준다."};
+	Item invertedCross = { "역십자가", 7, "이동속도를 두배 올려준다." };
+	Item ring = { "천사링", 8, "공격속도를 두배 올려준다." };
 	items.insert(pair<int, Item>(0, heart)); 
+	items.insert(pair<int, Item>(1, mushroom));
+	items.insert(pair<int, Item>(2, invertedCross));
+	items.insert(pair<int, Item>(3, ring));
 	for (auto it = items.begin(); it != items.end(); ++it)
 	{
 		equipment = new Equipment(it->second.name, it->second.price, it->second.explanation, it->first);
@@ -217,4 +223,9 @@ void Shop::wearEquipment()
 			return;
 		}
 	}
+}
+
+Equipment* Shop::getEquipment(int equipmentId)
+{
+	return saleItem[equipmentId];
 }

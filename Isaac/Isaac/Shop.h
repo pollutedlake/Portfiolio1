@@ -30,9 +30,12 @@ public:
 	void startShopping(DoubleBuffering* doubleBuffering, Player* _player);
 	void linePrint();
 	int printDoWhat();
+	Equipment* getEquipment(int equipmentId);
 	void textColor(int color, int background);
 	bool purchaseEquipment();
 	void sellEquipment();
 	void wearEquipment();
+	vector<Equipment*>* getSaleItem() { return &saleItem; }
+	map<int, Item> getItems() { return items; }
 };
 

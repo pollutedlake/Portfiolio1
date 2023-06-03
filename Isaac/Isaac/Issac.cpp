@@ -179,6 +179,11 @@ void Issac::startGame()
 						{
 							if (room->getLeft() != nullptr)
 							{
+								if (room->getLeft()->getRoomType() == SHOP)
+								{
+									shop->startShopping(doubleBuffering, player);
+									continue;
+								}
 								player->setPosition(make_pair(270, player->getPosition().second));
 								map->setCurRoom(room->getLeft());
 								map->update(-1, 0);
@@ -198,6 +203,11 @@ void Issac::startGame()
 						{
 							if (room->getRight() != nullptr)
 							{
+								if (room->getRight()->getRoomType() == SHOP)
+								{
+									shop->startShopping(doubleBuffering, player);
+									continue;
+								}
 								player->setPosition(make_pair(20, player->getPosition().second));
 								map->setCurRoom(room->getRight());
 								map->update(1, 0);
@@ -235,6 +245,11 @@ void Issac::startGame()
 						{
 							if (room->getDown() != nullptr)
 							{
+								if (room->getDown()->getRoomType() == SHOP)
+								{
+									shop->startShopping(doubleBuffering, player);
+									continue;
+								}
 								player->setPosition(make_pair(player->getPosition().first, 15));
 								map->setCurRoom(room->getDown());
 								map->update(0, 1);
@@ -492,18 +507,6 @@ void Issac::startGame()
 					break;
 				}
 			}
-			/*if (!((*objectIter)->isActive()))
-			{
-				if ((*objectIter)->getClassName() == typeid(Sucker*).name() || (*objectIter)->getClassName() == typeid(Fatty*).name())
-				{
-					room->dieEnemy();
-					dropCoin = new Coin((*objectIter)->getPosition(), (*objectIter)->getPrice());
-					objects.push_back(dropCoin);
-				}
-				delete *objectIter;
-				objects.erase(objectIter--);
-				continue;
-			}*/
 		}
 		// object들 그리기
 		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
@@ -613,6 +616,20 @@ void Issac::startGame()
 				}
 			}
 		}
+		// 착용한 장비 그리기
+		if (player->getEquipment() != nullptr)
+		{
+			for (int i = 0; i < player->getEquipment()->getDotHeight(); i++)
+			{
+				for (int j = 0; j < player->getEquipment()->getDotWidth(); j++)
+				{
+					if (player->getEquipment()->getDotLine(i, player->getEquipment()->getEquipmentId())[j] != 99)
+					{
+						screenColor[i][115 + j] = player->getEquipment()->getDotLine(i, player->getEquipment()->getEquipmentId())[j];
+					}
+				}
+			}
+		}
 		render();
 	}
 }
@@ -628,12 +645,21 @@ void Issac::saveGame()
 {
 	if (0 == fopen_s(&fp, "save.txt", "w"))
 	{
-		fprintf(fp, "%d %d %d\n", player->getMaxHp(), player->getCurHp(), player->getMoney());
+		fprintf(fp, "%d %d %d %d %d %d\n", player->getMaxHp(), player->getCurHp(), player->getMoney(), player->getAtt(), player->getSpeed(), player->getAttRate());
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++)
 			{
 				fprintf(fp, "%d ", map->getMap(i)[j]);
+			}
+		}
+		fprintf(fp, "%d %d ", player->getEquipment() != nullptr ? 1 : 0, player->getEquipment() != nullptr ? player->getEquipment()->getEquipmentId() : -1);
+		fprintf(fp, "%d ", player->getInventorySize());
+		if (player->getInventorySize() > 0)
+		{
+			for (int i = 0; i < player->getInventorySize(); i++)
+			{
+				fprintf(fp, "%d ", ((player->getInventory())[i])->getEquipmentId());
 			}
 		}
 		fclose(fp);
@@ -644,9 +670,9 @@ void Issac::loadGame()
 {
 	if (0 == fopen_s(&fp, "save.txt", "r"))
 	{
-		int maxHp, curHp, money;
+		int maxHp, curHp, money, att, speed, attRate, hasEquipment, equipmentId;
 		int tempMap[5][5];
-		fscanf_s(fp, "%d %d %d", &maxHp, &curHp, &money);
+		fscanf_s(fp, "%d %d %d %d %d %d", &maxHp, &curHp, &money, &att, &speed, &attRate);
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++)
@@ -661,6 +687,29 @@ void Issac::loadGame()
 					map->setEnter(i, j);
 				}
 			}
+		}
+		fscanf_s(fp, "%d %d ", &hasEquipment, &equipmentId);
+		if (hasEquipment)
+		{
+			player->putInventory(shop->getEquipment(equipmentId));
+			player->wearEquipment(0);
+		}
+		int inventoryN;
+		int inventoryId;
+		fscanf_s(fp, "%d ", &inventoryN);
+		for (int i = 0; i < inventoryN; i++)
+		{
+			fscanf_s(fp, "%d ", &inventoryId);
+			player->putInventory(shop->getEquipment(equipmentId));
+			const char* itemName = shop->getItems()[equipmentId].name;
+			for (int j = 0; j < (*(shop->getSaleItem())).size(); j++)
+			{
+				if ((*(shop->getSaleItem()))[j]->getName() == itemName)
+				{
+					(*(shop->getSaleItem())).erase((*(shop->getSaleItem())).begin() + j);
+				}
+			}
+			
 		}
 		player->setMaxHp(maxHp);
 		player->setcurHp(curHp);
