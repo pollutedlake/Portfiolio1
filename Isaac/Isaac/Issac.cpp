@@ -10,12 +10,15 @@ Issac::Issac()
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
 	objects.push_back(player);
 	infoIndex = 0;
-	isStartScene = true;
+	scene = STARTSCENE;
+	//isStartScene = true;
 	uiMgr = new UIMgr();
 	coin = new Coin();
 	shop = new Shop();
 	fp = NULL;
+	endTime = NULL;
 	fopen_s(&fp, "save.txt", "r");
+	PlaySound(TEXT("./sound.wav"), NULL, SND_ASYNC | SND_LOOP);
 }
 
 Issac::~Issac()
@@ -36,8 +39,10 @@ void Issac::startGame()
 	doubleBuffering->screenInit();
 	while(true)
 	{
+		curTime = clock();
 		// 시작 타이틀 화면
-		if (isStartScene)
+		if(scene == STARTSCENE)
+		//if (isStartScene)
 		{
 			for (int i = 0; i < 79; i++)
 			{
@@ -80,12 +85,17 @@ void Issac::startGame()
 				int key = _getch();
 				if (key == 's' || key == 'S')
 				{
-					isStartScene = false;
-					fclose(fp);
+					scene = INGAME;
+					//isStartScene = false;
+					if(fp != nullptr)
+					{
+						fclose(fp);
+					}
 				}
 				if ((key == 'l' || key == 'L') && existFile)
 				{
-					isStartScene = false;
+					scene = INGAME;
+					//isStartScene = false;
 					fclose(fp);
 					loadGame();
 				}
@@ -119,10 +129,20 @@ void Issac::startGame()
 					}
 				}
 			}
+			if (endTime == NULL)
+			{
+				endTime = clock();
+			}
+			if (curTime - endTime > 5000)
+			{
+				scene = STARTSCENE;
+				endTime = NULL;
+			}
 			render();
 			continue;
 		}
 		room = map->getCurRoom();
+		// 게임클리어 화면
 		if (room->getIsEndRoom())
 		{
 			for (int i = 0; i < SCREENHEIGHT; i++)
@@ -144,11 +164,25 @@ void Issac::startGame()
 					}
 				}
 			}
+			if (endTime == NULL)
+			{
+				endTime = clock();
+			}
+			if (curTime - endTime > 5000)
+			{
+				scene = STARTSCENE;
+				endTime = NULL;
+			}
 			render();
 			continue;
 		}
+		// Room에 입장하면 Player를 제외한 Object들을 비활성화하고 Room에 생성된 Enemy들을 objects에 넣어준다.
 		if (!room->getEnter())
 		{
+			for (auto it = objects.begin() + 1; it != objects.end(); ++it)
+			{
+				(*it)->switchActive();
+			}
 			vector<Enemy*> enemies = room->getEnemies();
 			for (auto it = enemies.begin(); it != enemies.end(); ++it)
 			{
@@ -263,7 +297,11 @@ void Issac::startGame()
 			}
 			else if (key == 'a' || key == 'A')
 			{
-				objects.push_back(player->attack());
+				Projectile* tempProjectile = player->attack();
+				if(tempProjectile != nullptr)
+				{
+					objects.push_back(tempProjectile);
+				}
 			}
 			else if (key == 27)
 			{
@@ -508,7 +546,7 @@ void Issac::startGame()
 				}
 			}
 		}
-		// object들 그리기
+		// 화면에 출력될 도트 색상 업데이트
 		for (auto objectIter = objects.begin(); objectIter != objects.end(); ++objectIter)
 		{
 			for (int i = 0; i < (*objectIter)->getDotHeight(); i++)
@@ -579,7 +617,7 @@ void Issac::startGame()
 				}
 			}
 		}
-		// ui 그리기
+		// 소지금 그리기
 		for (int i = 0; i < 13; i++)
 		{
 			for (int j = 0; j < 25; j++)
@@ -641,10 +679,14 @@ void Issac::render()
 	doubleBuffering->screenFlipping();
 }
 
+/*
+Player의 스탯과 현재까지의 진행상황을 저장하기 위한 방들의 정보, 착용하고 있는 장비의 고유ID, 인벤토리에 있는 장비들의 고유 ID를 저장한다.
+*/
 void Issac::saveGame()
 {
 	if (0 == fopen_s(&fp, "save.txt", "w"))
 	{
+		// Player의 스탯
 		fprintf(fp, "%d %d %d %d %d %d\n", player->getMaxHp(), player->getCurHp(), player->getMoney(), player->getAtt(), player->getSpeed(), player->getAttRate());
 		for (int i = 0; i < 5; i++)
 		{
@@ -653,26 +695,33 @@ void Issac::saveGame()
 				fprintf(fp, "%d ", map->getMap(i)[j]);
 			}
 		}
+		// 착용하고 있는 장비
 		fprintf(fp, "%d %d ", player->getEquipment() != nullptr ? 1 : 0, player->getEquipment() != nullptr ? player->getEquipment()->getEquipmentId() : -1);
+		// 인벤토리에 있는 장비
 		fprintf(fp, "%d ", player->getInventorySize());
 		if (player->getInventorySize() > 0)
 		{
 			for (int i = 0; i < player->getInventorySize(); i++)
 			{
-				fprintf(fp, "%d ", ((player->getInventory())[i])->getEquipmentId());
+				fprintf(fp, "%d ", player->getInventory()[i]->getEquipmentId());
 			}
 		}
 		fclose(fp);
 	}
 }
 
+/*
+Player의 스탯과 현재 착용하고 있는 장비와 인벤토리에 있는 장비들의 고유ID를 읽어와 적용하고 상점에서 파는 장비들 목록에서 제거한다.
+*/
 void Issac::loadGame()
 {
 	if (0 == fopen_s(&fp, "save.txt", "r"))
 	{
+		// Player의 스탯
 		int maxHp, curHp, money, att, speed, attRate, hasEquipment, equipmentId;
 		int tempMap[5][5];
 		fscanf_s(fp, "%d %d %d %d %d %d", &maxHp, &curHp, &money, &att, &speed, &attRate);
+		// 맵 정보
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++)
@@ -688,32 +737,50 @@ void Issac::loadGame()
 				}
 			}
 		}
+		// 착용하고 있는 장비
 		fscanf_s(fp, "%d %d ", &hasEquipment, &equipmentId);
 		if (hasEquipment)
 		{
 			player->putInventory(shop->getEquipment(equipmentId));
 			player->wearEquipment(0);
 		}
+		// 인벤토리
 		int inventoryN;
 		int inventoryId;
+		const char* itemName = shop->getItems()[equipmentId].name;
+		for (unsigned int j = 0; j < (*(shop->getSaleItem())).size(); j)
+		{
+			if ((*(shop->getSaleItem()))[j]->getName() == itemName)
+			{
+				(*(shop->getSaleItem())).erase((*(shop->getSaleItem())).begin() + j);
+			}
+			else {
+				j++;
+			}
+		}
 		fscanf_s(fp, "%d ", &inventoryN);
 		for (int i = 0; i < inventoryN; i++)
 		{
 			fscanf_s(fp, "%d ", &inventoryId);
-			player->putInventory(shop->getEquipment(equipmentId));
-			const char* itemName = shop->getItems()[equipmentId].name;
-			for (int j = 0; j < (*(shop->getSaleItem())).size(); j++)
+			player->putInventory(shop->getEquipment(inventoryId));
+			const char* itemName = shop->getItems()[inventoryId].name;
+			for (unsigned int j = 0; j < (*(shop->getSaleItem())).size();)
 			{
 				if ((*(shop->getSaleItem()))[j]->getName() == itemName)
 				{
 					(*(shop->getSaleItem())).erase((*(shop->getSaleItem())).begin() + j);
 				}
+				else {
+					j++;
+				}
 			}
-			
 		}
 		player->setMaxHp(maxHp);
 		player->setcurHp(curHp);
 		player->setMoney(money);
+		player->setAtt(att);
+		player->setAttRate(attRate);
+		player->setSpeed(speed);
 		map->setMap(tempMap);
 		fclose(fp);
 	}

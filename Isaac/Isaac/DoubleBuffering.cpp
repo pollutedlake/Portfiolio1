@@ -12,6 +12,7 @@ DoubleBuffering::~DoubleBuffering()
 
 }
 
+// ConsoleScreenBuffer 생성
 void DoubleBuffering::screenInit()
 {
 	CONSOLE_CURSOR_INFO cci;
@@ -25,6 +26,8 @@ void DoubleBuffering::screenInit()
 	SetConsoleCursorInfo(g_hScreen[1], &cci);
 }
 
+
+// Buffer 교체
 void DoubleBuffering::screenFlipping()
 {
 	SetConsoleActiveScreenBuffer(g_hScreen[g_nScreenIndex]);
@@ -53,6 +56,7 @@ void DoubleBuffering::printLine(int x, int y, int color, const char* string)
 	WriteFile(g_hScreen[g_nScreenIndex], string, strlen(string), &dw, NULL);
 }
 
+// 다른 색상이 나올때까지 도트를 이어붙이다가 다른 색상이 나오면 전 색상으로 이어붙인 도트 찍기
 void DoubleBuffering::screenPrint(int screen[SCREENHEIGHT][SCREENWIDTH] )
 {
 	for (int i = 0; i < SCREENHEIGHT; i++)

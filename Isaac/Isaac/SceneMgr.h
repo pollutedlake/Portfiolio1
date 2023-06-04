@@ -1,4 +1,10 @@
 #pragma once
+
+#define STARTSCENE	1
+#define GAMEOVER	2
+#define GAMECLEAR	3
+#define INGAME		4
+
 class SceneMgr
 {
 private:

@@ -31,7 +31,7 @@ void Shop::startShopping(DoubleBuffering* doubleBuffering, Player* _player)
 	doubleBuffering->screenRelease();
 	CONSOLE_FONT_INFOEX info = { 0 };
 	info.cbSize = sizeof(info);
-	info.dwFontSize.Y = 15;
+	info.dwFontSize.Y = 30;
 	info.FontWeight = FW_NORMAL;
 	wcscpy_s(info.FaceName, L"Lucida Console");
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
@@ -182,7 +182,7 @@ void Shop::wearEquipment()
 		cout << "Player의 스탯" << endl;
 		cout << "MAX HP : " << player->getMaxHp() << endl;
 		cout << "HP : " << player->getCurHp() << endl;
-		printf("공격력 : %d(10 + )\n", player->getAtt());
+		printf("공격력 : %d\n", player->getAtt());
 		cout << "스피드 : " << player->getSpeed() << endl;
 		cout << "공격속도 : " << player->getAttRate() << endl;
 		linePrint();
@@ -227,5 +227,12 @@ void Shop::wearEquipment()
 
 Equipment* Shop::getEquipment(int equipmentId)
 {
-	return saleItem[equipmentId];
+	for (auto it = saleItem.begin(); it != saleItem.end(); ++it)
+	{
+		if ((*it)->getEquipmentId() == equipmentId)
+		{
+			return *it;
+		}
+	}
+	return nullptr;
 }

@@ -34,6 +34,7 @@ Map::~Map()
 
 void Map::createRooms()
 {
+	// Room 정보에 따라 Room 타입별로 생성
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
@@ -42,18 +43,18 @@ void Map::createRooms()
 			{
 				if (map[i][j] == 1)
 				{
-					rooms[i][j] = new Room(1);
+					rooms[i][j] = new Room(STARTROOM);
 					startRoom = rooms[i][j];
 					playerPosCol = i;
 					playerPosRow = j;
 				}
 				else if (map[i][j] == 2)
 				{
-					rooms[i][j] = new Room(2);
+					rooms[i][j] = new Room(ENDROOM);
 				}
 				else if (map[i][j] == 5)
 				{
-					rooms[i][j] = new Room(3);
+					rooms[i][j] = new Room(SAVEROOM);
 				}
 				else if (map[i][j] == 6)
 				{
@@ -66,6 +67,7 @@ void Map::createRooms()
 			}
 		}
 	}
+	// 그래프 형태로 주위에 연결된 방 연결
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
@@ -106,6 +108,7 @@ void Map::createRooms()
 	curRoom = startRoom;
 }
 
+// 이미 지나온 Room 현재 위치한 Room update
 void Map::update(int x, int y)
 {
 	map[playerPosCol][playerPosRow] = 4;
@@ -114,6 +117,7 @@ void Map::update(int x, int y)
 	map[playerPosCol][playerPosRow] = 1;
 }
 
+// minimap update
 void Map::updateMiniMap()
 {
 	for (int i = 1; i < 19; i++)
@@ -138,28 +142,28 @@ void Map::updateMiniMap()
 			int color = 99;
 			switch (map[i][j])
 			{
-			case 1:
+			case 1:		// 현재 위치
 				color = 14;
 				break;
-			case 4:
+			case 4:		// 지나온 방
 				color = 15;
 				break;
-			case 2:
+			case ENDROOM:
 				if ((abs(playerPosCol - i) < 2) && (abs(playerPosRow - j) < 2))
 				{
 					color = 12;
 				}
 				break;
-			case 3:
+			case 3:		// 근처에 있는 탐색하지 않은 방
 				if ((abs(playerPosCol - i) < 2) && (abs(playerPosRow - j) < 2))
 				{
 					color = 8;
 				}
 				break;
-			case 5:
+			case 5:		// 세이브룸
 				color = 1;
 				break;
-			case 6:
+			case 6:		// 상점
 				color = 6;
 				break;
 			}

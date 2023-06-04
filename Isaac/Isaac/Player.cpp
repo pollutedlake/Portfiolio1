@@ -42,6 +42,7 @@ Player::~Player()
 
 }
 
+// Player 이동 함수
 void Player::move(int x, int y)
 {	
 	if(!isWalk)
@@ -61,6 +62,7 @@ void Player::move(int x, int y)
 	lookAt = make_pair(x, y);
 }
 
+// 이동중인 방향, 데미지를 입고 깜빡이고 있는지, 공격하고 있는지 상태에 따른 도트 색상 반환
 int* Player::getColorLine(int row)
 {
 	if (row < 26)
@@ -105,6 +107,7 @@ int* Player::getColorLine(int row)
 	}
 }
 
+// 데미지를 입고 빨개진 도트 색상 반환
 int* Player::getRedPlayer(int* source)
 {
 	int red[29];
@@ -122,6 +125,7 @@ int* Player::getRedPlayer(int* source)
 	return red;
 }
 
+// Player의 상태 변환
 void Player::Update()
 {
 	curTime = clock();
@@ -165,6 +169,7 @@ const char* Player::getClassName()
 	return typeid(this).name();
 }
 
+// 공격 시 Projectile 바라보고 있는 방향에 생성하고 return
 Projectile* Player::attack()
 {
 	if(curTime - oldTime > attRate)
@@ -175,6 +180,7 @@ Projectile* Player::attack()
 		isAttack = true;
 		return projectile;
 	}
+	return nullptr;
 }
 
 void Player::getDamage(int damage)

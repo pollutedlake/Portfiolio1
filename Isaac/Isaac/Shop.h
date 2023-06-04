@@ -1,6 +1,6 @@
 #pragma once
 #include<Windows.h>
-#include "DoubleBuffering.h";
+#include "DoubleBuffering.h"
 #include "Equipment.h"
 #include "Player.h"
 #include <iostream>

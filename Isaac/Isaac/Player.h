@@ -12,7 +12,6 @@ using namespace std;
 class Player : public Object
 {
 private:
-int speed;
 pair<int, int> lookAt;
 
 int frontIdleHead[26][29] = { {99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	0,	0,	0,	0,	0,	0,	0,	0,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99,	99},
@@ -335,22 +334,28 @@ clock_t curTime, oldTime, attTime, walkTime, idleTime, invincibilityTime, twinkl
 int isWalk;
 
 bool isRed;
+
+// 스탯
 int att;
 int attRate;
 int curHp;
+int speed;
 int maxHp;
-int walkIndex;
-bool isAttack;
-bool invincibility;
 int money;
 
+int walkIndex;
+
+bool isAttack;		// 공격중인상태
+bool invincibility;		// 무적상태
+
 vector<Equipment*> inventory;
-Equipment* equipment;
+Equipment* equipment;		// 착용중인 장비
 
 public:
 	Player();
 	~Player();
 
+	// getter, setter
 	void getDamage(int damage);
 	int getMaxHp() { return maxHp; }
 	void setMaxHp(int _maxHp) {maxHp = _maxHp;}
@@ -375,6 +380,8 @@ public:
 	int* getColorLine(int row);
 	int* getRedPlayer(int* source);
 	Projectile* attack();
+
+	// 장비 관련
 	void putInventory(Equipment* equipment);
 	void takeOutEquipment(int index);
 	void wearEquipment(int index);

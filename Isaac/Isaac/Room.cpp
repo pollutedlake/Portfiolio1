@@ -14,6 +14,8 @@ Room::Room()
 	isSaveRoom = false;
 	isEndRoom = false;
 	roomType = 0;
+
+	// 적들을 랜덤으로 생성
 	random_device oRandomDevice;
 	mt19937_64 rnd(oRandomDevice());
 	uniform_int_distribution<int> enemyNRange(1, 4);
@@ -46,7 +48,7 @@ Room::Room(int _roomType)
 			info[i][j] = -1;
 		}
 	}
-	if(_roomType == 1)
+	if(_roomType == STARTROOM)
 	{
 		clear = true;
 		enter = true;
@@ -54,7 +56,7 @@ Room::Room(int _roomType)
 		isSaveRoom = false;
 		isEndRoom = false;
 	}
-	else if (_roomType == 2)
+	else if (_roomType == ENDROOM)
 	{
 		clear = true;
 		enter = false;
@@ -62,7 +64,7 @@ Room::Room(int _roomType)
 		isSaveRoom = false;
 		isEndRoom = true;
 	}
-	else if (_roomType == 3)
+	else if (_roomType == SAVEROOM)
 	{
 		clear = true;
 		enter = false;
@@ -95,6 +97,7 @@ int* Room::getRoomInfoLine(int row)
 	return info[row];
 }
 
+// Player의 위치를 넘겨받아 그 방향을 제외한 세 방향에서 랜덤한 위치에 Enemy spawn
 bool Room::setEnter(pair<int, int> playerPos)
 {
 	random_device oRandomDevice;

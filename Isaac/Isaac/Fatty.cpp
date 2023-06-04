@@ -32,6 +32,7 @@ Fatty::~Fatty()
 
 }
 
+// 상태에 따른 도트 색상 return
 int* Fatty::getColorLine(int row)
 {
 	if (row < 21)
@@ -57,8 +58,10 @@ const char* Fatty::getClassName()
 	return typeid(this).name();
 }
 
+// 상태와 위치 update
 void Fatty::Update()
 {
+	// 상태 업데이트
 	curTime = clock();
 	if (curTime - twinkleTime > 2000)
 	{
@@ -113,6 +116,7 @@ void Fatty::Update()
 			}
 		}
 	}
+	// 위치 없데이트
 	if (dir.first == 0 && dir.second != 0)
 	{
 		side = false;
@@ -135,6 +139,7 @@ void Fatty::Update()
 	}
 }
 
+// 데미지를 입었을 때 빨개진 도트 색상 return
 int* Fatty::getRedLine(int* source)
 {
 	int red[32];

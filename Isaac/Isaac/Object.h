@@ -10,6 +10,7 @@ protected:
 	int dotWidth;
 	int dotHeight;
 	bool active;
+
 public:
 	Object();
 	~Object();
@@ -17,6 +18,7 @@ public:
 	int getDotWidth() { return dotWidth; }
 	int getDotHeight() { return dotHeight; }
 	bool isActive() { return active; }
+	void switchActive() { active = !active; }
 	pair<int, int> getPosition() { return position; }
 	void setPosition(pair<int, int> _position) { position = _position; }
 	virtual void collision(Object* object) {};

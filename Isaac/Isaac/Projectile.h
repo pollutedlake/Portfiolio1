@@ -9,7 +9,7 @@ using namespace std;
 class Projectile : public Object
 {
 private:
-	pair<int, int>  dir;
+	pair<int, int>  dir;		// 이동할 방향
 	int dotColor[7][7] = { {99, 99, 0, 0, 0, 99, 99},
 						   {99, 0,  3, 3, 3, 0,  99},
 						   {0,  3,  3, 3, 3, 3,  0},

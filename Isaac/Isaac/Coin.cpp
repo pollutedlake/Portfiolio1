@@ -25,6 +25,7 @@ int* Coin::getColorLine(int row)
 	return color[row];
 }
 
+// player와 충돌 시 비활성화되고 소지금 증가
 void Coin::collision(Object* object)
 {
 	if (!strcmp(object->getClassName(), typeid(Player*).name()))

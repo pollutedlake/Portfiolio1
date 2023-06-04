@@ -16,6 +16,7 @@ Projectile::~Projectile()
 
 }
 
+// 위치 매 프레임마다 update
 void Projectile::Update()
 {
 	position.first += dir.first * velocity;
@@ -28,6 +29,7 @@ void Projectile::Update()
 	}
 }
 
+// Enemy에 충돌하면 데미지주고 비활성화
 void Projectile::collision(Object* object)
 {
 	if (object->getClassName() == typeid(Sucker*).name() || object->getClassName() == typeid(Fatty*).name())

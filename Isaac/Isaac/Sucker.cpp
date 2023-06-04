@@ -25,8 +25,10 @@ Sucker::~Sucker()
 	
 }
 
+// 상태와 위치 update
 void Sucker::Update()
 {
+	// 상태 업데이트
 	curTime = clock();
 	if (curTime - oldTime > flyRate)
 	{
@@ -55,6 +57,7 @@ void Sucker::Update()
 	{
 		return;
 	}
+	// 위치 업데이트
 	if (dir.first == 0 && dir.second != 0)
 	{
 		setPosition(make_pair(getPosition().first, getPosition().second + (dir.second / abs(dir.second)) * velocity));
@@ -78,6 +81,7 @@ const char* Sucker::getClassName()
 	return typeid(this).name();
 }
 
+// 도트 색상 return
 int* Sucker::getColorLine(int row)
 {
 	if(flyMotion)
@@ -101,6 +105,7 @@ int* Sucker::getColorLine(int row)
 	}
 }
 
+// 빨개진 도트 색상 return
 int* Sucker::getRedLine(int* source)
 {
 	int red[14];

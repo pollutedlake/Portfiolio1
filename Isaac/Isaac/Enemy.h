@@ -9,7 +9,7 @@ class Enemy : public Object
 protected:
 int curHp;
 int maxHp;
-pair<int, int> dir;
+pair<int, int> dir;		// Player와의 거리
 int att;
 bool isRed;
 bool isTwinkle;
